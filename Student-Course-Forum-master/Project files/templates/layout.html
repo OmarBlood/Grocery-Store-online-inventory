@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      {% block head %}
+      <meta charset ="utf-8">
+      <Title>Team-k Project</Title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+      {% endblock %}
+  </head>
+  <body>
+    {% include 'includes/_navbar.html' %}
+    <div class="container">
+      <br><br><br>
+      {% include 'includes/_Notification.html' %}
+      {% block body%}{% endblock %}
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.ckeditor.com/4.9.1/standard/ckeditor.js"></script>
+    <script type="text/javascript">
+      CKEDITOR.replace('editor')
+    </script>
+  </body>
+</html>

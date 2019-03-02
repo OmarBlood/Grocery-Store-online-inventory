@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+
+{% block body %}
+
+<header>
+   <h1>Lecture {{id}}</h1>
+</header>
+
+<article>
+  <a href = '/lecture/{{id}}'><button type="button">You can find the lecture here</button></a>
+  <br><hr>
+  <p>*Posts go here, with a division between each new post*</p>
+  <hr>
+  <p>Another post, and so on. The "<|h|r>" tag stands for horizontal rule and is the lining you see between the previous statement and this one. This should be the last line after a new comment is posted in order to indicate clear separation.</p>
+  <hr>
+<div class = "container">
+  <form action="discussion_comments.html" method=get>
+  	<textarea rows="5" cols="100"></textarea><br>
+  	<button type="button">Post Comment</button>
+  </form>
+</div>
+</article>
+
+
+</body>
+{% endblock %}
