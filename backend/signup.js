@@ -4,6 +4,23 @@ const sqlite3 = require('sqlite3').verbose();
 const format = require('string-format');
 const cookieSession = require('cookie-session');
 
+const db = new sqlite3.Database( __dirname + '/users.db',
+	function(err){
+		if(!err){
+			db.run(`
+				CREATE TABLE IF NOT EXISTS users (
+				id INTEGER PRIMARY KEY,
+				firstName TEXT,
+				lastName TEXT,
+				username UNIQUE TEXT,
+				password UNIQUE TEXT,
+				email TEXT,
+				dob DATE
+			)`);
+			console.log('opened users.db');
+		}
+	});
+
 const app=express();
 const port = process.env.PORT || 8000;
 
@@ -46,6 +63,10 @@ app.post('/signup.html', function(req,res) {
 		console.log('Cannot have a blank date of birth!');
 	}
 	else{
+		db.run(`INSERT INTO users(firstName,lastName,username,password,email,dob) VALUES(?,?,?,?,?,?)`,
+			[req.body.firstName, req.body.lastName, req.body.username, req.body.password, req.body.email, req.body.dob],
+			function(err) { if(!err) {res.redirect('/signup.html'); }}
+		);
 		res.redirect('/login.html');
 	}
 });
