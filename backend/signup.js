@@ -14,19 +14,19 @@ const db = new sqlite3.Database( __dirname + '/userbase.db',
 				username TEXT,
 				password TEXT,
 				email TEXT,
-				dob DATE
+				dob DATE,
+				administration BOOLEAN
 			)`);
 			console.log('opened userbase.db');
 		}
 	});
 
-//admin = [['admin', '1', 'admin1', 'admin1', 'admin@mun', 2019-01-01]];
+//admin = [['admin', '1', 'admin1', 'admin1', 'admin@mun', 2019-01-01, true]];
 const app=express();
 const port = process.env.PORT || 8000;
 
 app.use(express.static( __dirname ));
 app.use(bodyParser.urlencoded({extended:true}));
-//Still need to figure out how to incorporate cookies
 app.use(cookieSession({
 	name: 'session',
 	secret: 'foo'
@@ -99,8 +99,8 @@ function reg_check(req,res){
 					res.redirect('/signup');
 				}
 				else{
-					db.run(`INSERT INTO users(firstName,lastName,username,password,email,dob) VALUES(?,?,?,?,?,?)`,
-						[req.body.firstName, req.body.lastName, req.body.username, req.body.password, req.body.email, req.body.dob]);
+					db.run(`INSERT INTO users(firstName,lastName,username,password,email,dob,administration) VALUES(?,?,?,?,?,?,?)`,
+						[req.body.firstName, req.body.lastName, req.body.username, req.body.password, req.body.email, req.body.dob, false]);
 						res.redirect('/login');
 						console.log('Both username and password are unique. You may pass!');
 				}
@@ -113,8 +113,8 @@ function reg_check(req,res){
 app.get('/signup', function(req,res) {
 
 //	for(let row of admin){
-//		db.run(`INSERT INTO users(firstName,lastName,username,password,email,dob) 
-//			VALUES(?,?,?,?,?,?)`, row, (err) => {
+//		db.run(`INSERT INTO users(firstName,lastName,username,password,email,dob,administration) 
+//			VALUES(?,?,?,?,?,?,?)`, row, (err) => {
 //	       		if(err){
 //				console.log(err);
 //			}
@@ -123,7 +123,7 @@ app.get('/signup', function(req,res) {
 //			}
 //		});
 //	}
-//
+
 	console.log('Reached the signup page.');
 	res.redirect('/signup.html');	
 
@@ -151,7 +151,7 @@ app.post('/login.html', function(req,res) {
 //Check for username and password
 	if(req.body.username && req.body.password){
 		console.log('Checking database for entries');
-		db.get(`SELECT password FROM users where username = ?`,[req.body.username], function(err, row) {
+		db.get(`SELECT password, administration FROM users where username = ?`,[req.body.username], function(err, row) {
 			if(err){
 				console.log(err);
 				res.redirect('/login');
@@ -162,7 +162,10 @@ app.post('/login.html', function(req,res) {
 						req.session.auth = true;
 						req.session.username = req.body.username;
 						req.session.password = req.body.password;
-						res.redirect('/landing');//double check this when you get back
+						req.session.administration = row.administration;
+						console.log('Login successful. Welcome!');
+						//console.log(req.session);
+						res.redirect('/landing');
 					}
 					else{
 						req.session.auth = false;
@@ -178,6 +181,11 @@ app.post('/login.html', function(req,res) {
 			}
 		});
 	}
+});
+
+app.get('/landing', function(req,res) {
+	console.log('Reached the landing page.');
+	res.redirect('/landing.html');
 });
 
 app.listen(port, function() {
