@@ -1,8 +1,10 @@
 const express = require('express');
+const hbs = require('express-hbs');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const format = require('string-format');
 const cookieSession = require('cookie-session');
+
 const db = new sqlite3.Database( __dirname + '/userbase.db',
 	function(err){
 		if(!err){
@@ -15,18 +17,28 @@ const db = new sqlite3.Database( __dirname + '/userbase.db',
 				password TEXT,
 				email TEXT,
 				dob DATE,
-				administration BOOLEAN
+				administration BOOLEAN,
+				recent_items VARCHAR
 			)`);
 			console.log('opened userbase.db');
 		}
 	});
 
 //admin = [['admin', '1', 'admin1', 'admin1', 'admin@mun', 2019-01-01, true]];
+
 const app=express();
 const port = process.env.PORT || 8000;
 
 app.use(express.static( __dirname ));
 app.use(bodyParser.urlencoded({extended:true}));
+
+app.set('views', __dirname);
+app.engine('hbs', hbs.express4({
+	partialsDir: __dirname,
+	defaultLayout: __dirname +'/page.hbs'
+}));
+app.set('view engine', 'hbs');
+
 app.use(cookieSession({
 	name: 'session',
 	secret: 'foo'
@@ -151,31 +163,36 @@ app.post('/login.html', function(req,res) {
 //Check for username and password
 	if(req.body.username && req.body.password){
 		console.log('Checking database for entries');
-		db.get(`SELECT password, administration FROM users where username = ?`,[req.body.username], function(err, row) {
+		db.get(`SELECT firstName, lastName, username, password, email, dob, administration FROM users where username = ? AND password = ?`,[req.body.username, req.body.password], function(err, row) {
 			if(err){
 				console.log(err);
 				res.redirect('/login');
 			}
 			else{
 				if(row){
-					if(row.password === req.body.password){
-						req.session.auth = true;
-						req.session.username = req.body.username;
-						req.session.password = req.body.password;
-						req.session.administration = row.administration;
-						console.log('Login successful. Welcome!');
+					console.log('Entry found; credentials check');
+					req.session.auth = true;
+					req.session.firstName = row.firstName;
+					req.session.lastName = row.lastName;
+					req.session.username = req.body.username;
+					req.session.password = req.body.password;
+					req.session.email = row.email;
+					req.session.dob = row.dob;
+					req.session.administration = row.administration;
+					if(req.session.administration === 1){
+						console.log('Login successful. Welcome admin!');
 						//console.log(req.session);
-						res.redirect('/landing');
+						res.redirect('/admin.html');
 					}
 					else{
-						req.session.auth = false;
-						console.log('That password is not associated with the username; either register a new account or try a different username.');
-						res.redirect('/login');
+						console.log('Login successful. Welcome!');
+						console.log(req.session);
+						res.redirect('/page');
 					}
 				}
 				else{
 					req.session.auth = false;
-					console.log('No such user exists');
+					console.log('No such username or password exists');
 					res.redirect('/login');
 				}
 			}
@@ -186,6 +203,85 @@ app.post('/login.html', function(req,res) {
 app.get('/landing', function(req,res) {
 	console.log('Reached the landing page.');
 	res.redirect('/landing.html');
+});
+
+app.get('/page', function(req,res) {
+	res.type('.html');
+	res.render('page', {
+		sess : req.session,
+		title : 'User page'
+	});
+});
+
+app.post('/page', function(req,res) {
+	res.type('.html');
+	if(req.body.op === 'update'){
+		db.run(`UPDATE users SET username=?, password=?, email=?, dob=? WHERE firstName=? AND lastName=?`,
+	       		[req.body.username, req.body.password, req.body.email, req.body.dob, req.session.firstName, req.session.lastName], function(err){
+			if(!err){ res.redirect('/login');}
+		});
+	}
+	else if(req.body.op === 'logout'){
+		if(req.session.administration === 1){
+			req.session.firstName = 'admin';
+			req.session.lastName = '1';
+			req.session.username = 'admin1';
+			req.session.password = 'admin1';
+			req.session.email = 'admin@mun';
+			req.session.dob = 2019-01-01;
+			console.log(req.session);
+			res.redirect('/admin.html');	
+		}
+		else{	
+			req.session = null;
+			console.log(req.session);
+			res.redirect('/login');
+		}
+	}
+});
+
+app.get('/admin.html', function(req,res){
+});
+
+app.post('/admin.html', function(req,res){
+	if(req.body.op === 'modify'){
+		db.get(`SELECT firstName, lastName, username, password, email, dob, administration FROM users where username = ?`,[req.body.username], function(err, row) {
+			if(err){
+				console.log(err);
+				res.redirect('/admin.html');
+			}
+			else{
+				if(row){
+					console.log('User found; redirecting to user page for modification.');
+					req.session.firstName = row.firstName;
+					req.session.lastName = row.lastName;
+					req.session.username = req.body.username;
+					req.session.password = row.password;
+					req.session.email = row.email;
+					req.session.dob = row.dob;
+					console.log(req.session);
+					res.redirect('/page');
+				}
+				
+			}
+		});
+	}
+	else if(req.body.op === 'delete'){
+		db.run(`DELETE FROM users WHERE username=?`, [req.body.username], function(err){
+			if(err){
+				console.log(err);
+				res.redirect('/admin.html');
+			}
+			else{
+				console.log('Delete successful. User no longer exists!');
+				res.redirect('/admin.html');
+			}
+		});
+	}
+	else if(req.body.op === 'logout'){
+		req.session = null;
+		res.redirect('/login');
+	}
 });
 
 app.listen(port, function() {
