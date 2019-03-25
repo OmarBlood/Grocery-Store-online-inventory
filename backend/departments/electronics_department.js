@@ -24,17 +24,15 @@ const db = new sqlite3.Database( __dirname + '/food_dpt.db', function(err){
 });
 
 electronics = [
-	['E1', 'Laptop', 480, '', 'HP','computers'],
-	['E2', 'TV', 278, '', 'LG', 'screens'],
-	['E3', 'Headphones', 59, '', 'Beats', 'accessories'],
-	['E4', 'Blender', 42, '', 'Hamilton', 'appliances'],
-	['E5', 'Mixer', 31, '', 'Orca', 'appliances'],
-	['E6', 'iPhone', 829, '', 'Apple', 'phones'],
-	['E7', 'Android', 720, '', 'Samsung', 'phones'],
-	['E8', '', '', '', '', ''],
-	['E9', '', '', '', '', ''],
-	['E10', '', '', '', '', ''],
-	['E11', '', '', '', '', ''],
+	['E1', 'Laptop', 480, 'Intel Core i3, 4GB RAM, 500GB Storage.', 'HP','computers'],
+	['E2', 'TV', 278, '55-inch Screen with a 4K UltraHD display. Multiple HDMI and USB inputs.', 'LG', 'screens'],
+	['E3', 'Headphones', 59, 'Bluetooth, NFC Fucntionality, internal battery supports upto 30 hours of use.', 'Beats', 'accessories'],
+	['E4', 'Blender', 42, '800 Watts, two-speeds control, 5 blades.', 'Hamilton', 'appliances'],
+	['E5', 'Mixer', 31, '150 Watts, three-speeds control, additional accessories included.', 'Orca', 'appliances'],
+	['E6', 'iPhone', 829, '128GB, Silver, Unlocked 5.3-inch display, face recognition, 8MP Camera.', 'Apple', 'phones'],
+	['E7', 'Android', 720, '128GB, Gold, 4GB RAM, 5-inch display, 8MP Camera, Fingerprint scanner.', 'Samsung', 'phones'],
+	['E8', 'Microwave', '60', '700 Watts, 10 power levels, child safety lock, weight and time defrost.', 'Danby', 'appliances'],
+	['E9', 'Coffee Machine', 138, '14 oz water reservoir, single capacity, packages and ground coffee compatible.', 'Nespresso', '']
 ];
 
 for(let row of electronics){
