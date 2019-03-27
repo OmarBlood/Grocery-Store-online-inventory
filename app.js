@@ -1,10 +1,11 @@
+//----Importing all required packages----//
 const express = require('express');
 const hbs = require('express-hbs');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const format = require('string-format');
 const cookieSession = require('cookie-session');
-
+//----Create user database----//
 const db = new sqlite3.Database( __dirname + '/userbase.db',
 	function(err){
 		if(!err){
@@ -20,12 +21,145 @@ const db = new sqlite3.Database( __dirname + '/userbase.db',
 				administration BOOLEAN,
 				recent_items VARCHAR
 			)`);
+			
 			console.log('opened userbase.db');
 		}
 	});
 
 //admin = [['admin', '1', 'admin1', 'admin1', 'admin@mun', 2019-01-01, true]];
 
+//----Create food database----//
+const dbf = new sqlite3.Database( __dirname + '/food_dpt.db',
+	function(err){
+		if(err){
+			console.log(err);
+		}
+		else if(!err){
+			dbf.run(`
+				CREATE TABLE IF NOT EXISTS food(
+				id INTEGER PRIMARY KEY,
+				name TEXT,
+				description TEXT,
+				type TEXT
+			)`);
+			console.log('opened the food department database.');
+		}
+	});
+
+//----Create clothing database----//
+const dbc = new sqlite3.Database( __dirname + '/clothing_dpt.db',
+	function(err){
+		if(err){
+			console.log(err);
+		}
+		else if(!err){
+			dbc.run(`
+				CREATE TABLE IF NOT EXISTS clothing(
+				id INTEGER PRIMARY KEY,
+				name TEXT,
+				description TEXT,
+				material TEXT,
+				style TEXT,
+				size TEXT
+			)`);
+			console.log('opened the clothing department database.');
+		}
+	});
+
+//----Create electronics database----//
+const dbe = new sqlite3.Database( __dirname + '/electronics_dpt.db', function(err){
+	if(err){
+		console.log(err);
+	}
+	else if(!err){
+		dbe.run(`
+			CREATE TABLE IF NOT EXISTS electronics(
+			id INTEGER PRIMARY KEY,
+			name TEXT,
+			price TEXT,
+			description TEXT,
+			brand TEXT,
+			type TEXT
+		)`);
+		console.log('opened the electronics department database.');
+	}
+});
+
+//----Pushing data into food database----//
+foods = [
+	[0, 'lamb', 'Frenched Australian fresh rack of lamb', 'fresh'],
+	[1, 'beefSoup', 'Campbells chunky beef soup; 540ml', 'canned'],
+	[2, 'pepper', 'McCormick whole black pepper; 500g', 'fresh'],
+	[3, 'canola', 'Mazola canola oil, cholesterol free; 1.42li', 'bottled'],
+	[4, 'chickenSoup', 'Campbells chunky chicken noodle soup ; 540ml', 'canned'],
+	[5, 'crackers', 'Ritz crackers; 388g', 'packaged'],
+	[6, 'olive' , ' Pompein extra virgin olive oil  ; 946 ml' , 'bottled'],
+	[7, 'duck', 'Juicy single duck breast', 'fresh'],
+	[8 , 'ravioli' , ' Chef boyardi beef ravioli with tomato sauce  ; 425 g' , 'canned'],
+	[9 , 'noodle' , 'Maruchan instant ramen, assorted flavors  ; 150 g' , 'packaged'],
+	[10, 'gummy', 'Dtusa sour gummy bears, fat free, gluten free ; 141g', 'packaged'],
+	[11 , 'granola' , 'Nature valley oats and honey granola ; 253 g' , 'packaged'],
+	[12 , 'lasagna' , ' Chef boyardi beef lasagna with tomato sauce  ; 425 g' , 'canned']	
+];
+
+
+for(let row of foods){
+	dbf.run(`INSERT INTO food(id, name, description, type) 
+		VALUES(?,?,?,?)`, row, (err) => {
+	  	if(err){
+			console.log(err);
+		}
+	});
+}
+
+//----Pushing data into clothing database----//
+clothes = [
+	[13, 'black', 'Massimo Dutti, made in Pakistan', 'Cotton', 'Casual', 'Large'],
+	[14 , 'blueblouse' , ' Sadie, made in China' , 'Rayon', 'Casual', 'Large'],
+	[15 , 'cap' , ' Swagster, made in Egypt' , 'Polyester and Cotton', 'Casual', 'One size'],
+	[16 , 'fanela' , ' cottonil, made in Turkey' , 'Cotton', 'Homewear', 'Small'],
+	[17 , 'greenblouse' , ' Sadie, made in china' , 'Rayon', 'casual', 'XXL'],
+	[18, 'jeans', 'Barbados, made in China', 'Cotton', 'Casual', 'Medium'],
+	[19, 'jeans2', 'Barbados, made in China', 'Cotton', 'Casua', 'Large'],
+	[20 , 'oompa' , 'Gucci, Made in loompa' , 'Cotton and thread', 'Work', 'XXXXL'],
+	[21, 'shoe', 'Tahari, made in China', 'Leather and Felt', 'Size 9']
+];
+
+for(let row of clothes){
+	dbc.run(`INSERT INTO clothing(id, name, description, material, style, size) 
+		VALUES(?,?,?,?,?,?)`, row, (err) => {
+	  	if(err){
+			console.log(err);
+		}
+	});
+}
+
+//----Pushing data into electronics database----//
+electronics = [
+	[22, 'Laptop', '480', 'Intel Core i3, 4GB RAM, 500GB Storage.', 'HP','computers'],
+	[23, 'TV', '278', '55-inch Screen with a 4K UltraHD display. Multiple HDMI and USB inputs.', 'LG', 'screens'],
+	[24, 'Headphones', '59', 'Bluetooth, NFC Fucntionality, internal battery supports upto 30 hours of use.', 'Beats', 'accessories'],
+	[25, 'Blender', '42', '800 Watts, two-speeds control, 5 blades.', 'Hamilton', 'appliances'],
+	[26, 'Mixer', '31', '150 Watts, three-speeds control, additional accessories included.', 'Orca', 'appliances'],
+	[27, 'iPhone', '829', '128GB, Silver, Unlocked 5.3-inch display, face recognition, 8MP Camera.', 'Apple', 'phones'],
+	[28, 'Android', '720', '128GB, Gold, 4GB RAM, 5-inch display, 8MP Camera, Fingerprint scanner.', 'Samsung', 'phones'],
+	[29, 'Microwave', '60', '700 Watts, 10 power levels, child safety lock, weight and time defrost.', 'Danby', 'appliances'],
+	[30, 'Coffee Machine', '138', '14 oz water reservoir, single capacity, packages and ground coffee compatible.', 'Nespresso', '']
+];
+
+for(let row of electronics){
+	dbe.run(`INSERT INTO electronics(id, name, price, description, brand, type) 
+		VALUES(?,?,?,?,?,?)`, row, (err) => {
+	  	if(err){
+			console.log(err);
+		}
+		else{
+			console.log('Success');
+		}
+	});
+}
+
+//let count=db.run(SELECT count(*) FROM 
 const app=express();
 const port = process.env.PORT || 8000;
 
@@ -43,6 +177,7 @@ app.use(cookieSession({
 	name: 'session',
 	secret: 'foo'
 }));
+
 
 function reg_check(req,res){
 	let user = '';
@@ -123,7 +258,7 @@ function reg_check(req,res){
 }
 
 app.get('/', function(req,res) {
-	res.redirect('/landing');
+	res.redirect('/landing.html');
 });
 
 app.get('/signup', function(req,res) {
@@ -207,11 +342,6 @@ app.post('/login.html', function(req,res) {
 app.get('/landing', function(req,res) {
 	console.log('Reached the landing page.');
 	res.redirect('/landing.html');
-});
-
-app.get('/log_landing', function(req,res) {
-	console.log('Reached the logged-in version of the landing page.');
-	res.redirect('/log_landing.html');
 });
 
 app.get('/page', function(req,res) {
