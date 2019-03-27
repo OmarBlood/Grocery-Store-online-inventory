@@ -1,23 +1,24 @@
+div{
+  display: block;
+}
+/************************************** Logo Style ********************************************/
+#logo img{
+  width: 300px;
+}
+#logo p{
+  text-align: center;
+  display: block;
+}
 /************************************** Search Bar Style ********************************************/
 
-#Search_Bar img{
-  width: 300px;
-  margin-left: 20%;
-  margin-right: 20%;
+#Search_Bar label{
+  margin-left: 20px;
 }
 #Search_Bar input{
   border: 3px silver solid;
-  float: left;
-  margin-top:5.5%;
-}
-#Search_Bar label{
-  margin-top: 5.5%;
-  margin-left: 2%;
-  float: left;
 }
 #Search_Bar a{
-  margin-top: 5%;
-  margin-right: 2%;
+  margin-right: 20px;
 }
 
 /************************************** Navigation Bar Style ********************************************/
