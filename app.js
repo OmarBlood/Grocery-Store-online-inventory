@@ -244,7 +244,7 @@ app.post('/page', function(req,res) {
 		else{	
 			req.session = null;
 			console.log(req.session);
-			res.redirect('/login');
+			res.redirect('/landing');
 		}
 	}
 });
@@ -289,7 +289,7 @@ app.post('/admin.html', function(req,res){
 	}
 	else if(req.body.op === 'logout'){
 		req.session = null;
-		res.redirect('/login');
+		res.redirect('/landing');
 	}
 });
 
