@@ -18,7 +18,7 @@ const db = new sqlite3.Database( __dirname + '/clothing_dpt.db',
 				description TEXT,
 				material TEXT,
 				style TEXT,
-				size TEXT,
+				size TEXT
 			)`);
 			console.log('opened the clothing department database.');
 		}

@@ -3,19 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>User Login</title>
+    <style>
+        h1{
+            color: white;
+            text-align: center;
+            display: block;
+            width: 100%;
+            background-color: #242424;
+            opacity: 0.8;
+        }
+        input{
+            border: 3px silver solid;
+        }
+        div{
+            text-align: right;
+            margin-right: 40%;
+        }
+        p, a{
+            display: inline;
+        }
+    
+    </style>
 </head>
 <body>
-    <h2>Login into your Account</h2>
-    <label for="username">Username: </label>
-    <input type="text" name="username" id="login">
-
-    <label for="password">Password: </label>
-    <input type="text" name="password" id="login">
-
-    <br><br>
-
-    <p style="display: inline">Not registered? Sign up </p>
-    <a style="display: inline" href="signup"> here. </a>
     
+    <h1>Login into your Account</h1>
+    <div id="login">
+        <label for="username">Username: </label>
+        <input type="text" name="username" id="login">
+        <br>
+        <label for="password">Password: </label>
+        <input type="text" name="password" id="login">
+
+        <br><br>
+
+        <p>Not registered? Sign up </p>
+        <a href="signup"> here </a>
+    </div>
 </body>
 </html>
