@@ -20,24 +20,26 @@
 
 	<!-- ************************************ Navigations Section ************************************** -->
 
-	<div id="Navigation_Bar" style="display: block;">
+	<div id="Navigation_Bar">
 		<ul>
 			<li class="ex1"> 
 				<a> one </a> 
-				<ul>
-					<li class="ex1"> <a href="holder"> Holder </a> </li>
-					<li class="ex1"><a href="holder"> Holder </a></li>
-					<li class="ex1"><a href="holder"> Holder </a></li>
+				<ul class="ex2">
+					<li> <a href="holder"> Holder </a> </li>
+					<li> <a href="holder"> Holder </a> </li>
+					<li> <a href="holder"> Holder </a> </li>
 				</ul>
 			</li>
+
 			<li class="ex1">
 				<a> two </a>
-				<ul>
-					<li class="ex1"> <a href="holder"> Holder </a> </li>
-					<li class="ex1"><a href="holder"> Holder </a></li>
-					<li class="ex1"><a href="holder"> Holder </a></li>
+				<ul class="ex2">
+					<li> <a href="holder"> Holder </a> </li>
+					<li> <a href="holder"> Holder </a> </li>
+					<li> <a href="holder"> Holder </a> </li>
 				</ul>
 			</li>
+			
 			<li class="ex1"><a href="holder"> three </a></li>
 			<li class="ex1"><a href="holder"> four </a></li>
 		</ul>
@@ -47,28 +49,28 @@
 
 	<div id="Slideshow">
 
-		<div class="slideshow-container" style="z-index: -2">
+		<div class="slideshow-container">
 		
-			<div class="mySlides fade">
-				<div class="numbertext">1 / 3</div>
-				<img src="Pictures/1.jpg" style="width:100%">
-				<div class="text">Caption Text</div>
-			</div>
-		
-			<div class="mySlides fade">
-				<div class="numbertext">2 / 3</div>
-				<img src="Pictures/2.jpg" style="width:100%">
-				<div class="text">Caption Two</div>
-			</div>
-		
-			<div class="mySlides fade">
-				<div class="numbertext">3 / 3</div>
-				<img src="Pictures/3.jpg" style="width:100%">
-				<div class="text">Caption Three</div>
-			</div>
-		
-			<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-			<a class="next" onclick="plusSlides(1)">&#10095;</a>
+		<div class="mySlides fade">
+			<div class="numbertext">1 / 3</div>
+			<img src="Pictures/1.jpg" style="width:100%">
+			<div class="text">Caption Text</div>
+	  	</div>
+	  
+	  	<div class="mySlides fade">
+			<div class="numbertext">2 / 3</div>
+			<img src="Pictures/2.jpg" style="width:100%">
+			<div class="text">Caption Two</div>
+	  	</div>
+	  
+	  	<div class="mySlides fade">
+			<div class="numbertext">3 / 3</div>
+			<img src="Pictures/3.jpg" style="width:100%">
+			<div class="text">Caption Three</div>
+	  	</div>
+	  
+		<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+		<a class="next" onclick="plusSlides(1)">&#10095;</a>
 	  
 	  	</div>
 	  	<br>
@@ -82,7 +84,6 @@
 		<script>
 		let slideIndex = 0;
 		showSlides();
-
 		function showSlides() {
 			let i;
 			let slides = document.getElementsByClassName("mySlides");
@@ -100,20 +101,20 @@
 	</div>
 	<!-- ************************************ Last Viewed Item section ************************************** -->
 	<div id="last_viewed_item">
-		<h4 style="color: black; display: block">Last time you were here, you were looking at this: </h4>
+		<h4>Last time you were here, you were looking at this: </h4>
 		<!-- Put an empty box here that will contain a script the queries the DB for the item-->
 
 	</div>
 
 	<!-- ************************************ Contact Us section ************************************** -->
 	<div id="contact_us">
-		<h2 style="color: black; display: block; text-align: center">Contact Us</h2>
-		<p style="color: black; display: block">For more information about our services, or if you have any questinos,
+		<h2>Contact Us</h2>
+		<p>For more information about our services, or if you have any questinos,
 			please contact us at:
-			<ul style="display: block">
+			<ul>
 				<li>Phone: 1 (709) 863-8358</li>
 				<li>E-mail: shewal.barmeel@gmail.com</li>
-				<li>Address: 60 Elizabeth Ave, St. John's, Nl, Canada.</li>
+				<li>Address: 60 Elizabeth Ave, St. John's, NL, Canada.</li>
 			</ul>
 		</p>
 	</div>
