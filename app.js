@@ -141,7 +141,7 @@ app.get('/signup', function(req,res) {
 //	}
 
 	console.log('Reached the signup page.');
-	res.redirect('../frontend/signup.html');	
+	res.redirect('signup.html');	
 
 });
 	
