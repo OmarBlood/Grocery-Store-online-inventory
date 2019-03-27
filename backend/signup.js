@@ -29,7 +29,7 @@ const db = new sqlite3.Database( __dirname + '/userbase.db',
 const app=express();
 const port = process.env.PORT || 8000;
 
-app.use(express.static( __dirname ));
+app.use(express.static( __dirname + '/frontend'));
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.set('views', __dirname);
@@ -121,6 +121,10 @@ function reg_check(req,res){
 	}
 	
 }
+
+app.get('/', function(req,res) {
+	res.redirect('/landing.html');
+});
 
 app.get('/signup', function(req,res) {
 
