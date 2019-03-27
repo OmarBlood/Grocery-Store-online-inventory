@@ -123,7 +123,7 @@ function reg_check(req,res){
 }
 
 app.get('/', function(req,res) {
-	res.redirect('/landing.html');
+	res.redirect('/landing');
 });
 
 app.get('/signup', function(req,res) {
@@ -186,12 +186,12 @@ app.post('/login.html', function(req,res) {
 					if(req.session.administration === 1){
 						console.log('Login successful. Welcome admin!');
 						//console.log(req.session);
-						res.redirect('/admin.html');
+						res.redirect('/log_landing');
 					}
 					else{
 						console.log('Login successful. Welcome!');
 						console.log(req.session);
-						res.redirect('/page');
+						res.redirect('/log_landing');
 					}
 				}
 				else{
@@ -207,6 +207,11 @@ app.post('/login.html', function(req,res) {
 app.get('/landing', function(req,res) {
 	console.log('Reached the landing page.');
 	res.redirect('/landing.html');
+});
+
+app.get('/log_landing', function(req,res) {
+	console.log('Reached the logged-in version of the landing page.');
+	res.redirect('/log_landing.html');
 });
 
 app.get('/page', function(req,res) {
