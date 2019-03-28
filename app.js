@@ -6,20 +6,25 @@ const sqlite3 = require('sqlite3').verbose();
 const format = require('string-format');
 const cookieSession = require('cookie-session');
 
-function fill_Food(){
-	for(let row of foods){
-		dbf.run(`INSERT INTO food(id, name, description, type) 
-			VALUES(?,?,?,?)`, row, (err) => {
-	  	if(err){
-			console.log(err);
+function fill_Food(foods, dbf){
+	//let count = dbf.run(`SELECT COUNT (*) FROM food`)
+	//console.log(count)
+	// if count == 0{
+		for(let row of foods){
+			dbf.run(`INSERT INTO food(id, name, description, type) 
+				VALUES(?,?,?,?)`, row, (err) => {
+			  if(err){
+				console.log(err);
+			}
+		});
 		}
-	});
-	}
+	//}
+
 }
 
-function fill_Clothing(){
+function fill_Clothing(clothes, dbc){
 	for(let row of clothes){
-		dbf.run(`INSERT INTO clothing(id, name, description, material, style, size) 
+		dbc.run(`INSERT INTO clothing(id, name, description, material, style, size) 
 			VALUES(?,?,?,?,?,?)`, row, (err) => {
 	  	if(err){
 			console.log(err);
@@ -28,9 +33,9 @@ function fill_Clothing(){
 	}
 }
 
-function fill_Electronics(){
+function fill_Electronics(electronics, dbe){
 	for(let row of electronics){
-		dbf.run(`INSERT INTO electronic(id, name, price, description, brand, type) 
+		dbe.run(`INSERT INTO electronic(id, name, price, description, brand, type) 
 			VALUES(?,?,?,?,?,?)`, row, (err) => {
 	  	if(err){
 			console.log(err);
@@ -106,7 +111,7 @@ const dbe = new sqlite3.Database( __dirname + '/electronics_dpt.db', function(er
 	}
 	else if(!err){
 		dbe.run(`
-			CREATE TABLE IF NOT EXISTS electronics(
+			CREATE TABLE IF NOT EXISTS electronic(
 			id INTEGER PRIMARY KEY,
 			name TEXT,
 			price TEXT,
@@ -135,7 +140,7 @@ foods = [
 	[12 , 'lasagna' , ' Chef boyardi beef lasagna with tomato sauce  ; 425 g' , 'canned']	
 ];
 
-
+/*
 for(let row of foods){
 	dbf.run(`INSERT INTO food(id, name, description, type) 
 		VALUES(?,?,?,?)`, row, (err) => {
@@ -144,7 +149,7 @@ for(let row of foods){
 		}
 	});
 }
-
+*/
 //----Pushing data into clothing database----//
 clothes = [
 	[13, 'black', 'Massimo Dutti, made in Pakistan', 'Cotton', 'Casual', 'Large'],
@@ -158,6 +163,7 @@ clothes = [
 	[21, 'shoe', 'Tahari, made in China', 'Leather and Felt', 'Size 9']
 ];
 
+/*
 for(let row of clothes){
 	dbc.run(`INSERT INTO clothing(id, name, description, material, style, size) 
 		VALUES(?,?,?,?,?,?)`, row, (err) => {
@@ -166,6 +172,7 @@ for(let row of clothes){
 		}
 	});
 }
+*/
 
 //----Pushing data into electronics database----//
 electronics = [
@@ -179,7 +186,7 @@ electronics = [
 	[29, 'Microwave', '60', '700 Watts, 10 power levels, child safety lock, weight and time defrost.', 'Danby', 'appliances'],
 	[30, 'Coffee Machine', '138', '14 oz water reservoir, single capacity, packages and ground coffee compatible.', 'Nespresso', '']
 ];
-
+/*
 for(let row of electronics){
 	dbe.run(`INSERT INTO electronics(id, name, price, description, brand, type) 
 		VALUES(?,?,?,?,?,?)`, row, (err) => {
@@ -191,7 +198,7 @@ for(let row of electronics){
 		}
 	});
 }
-
+*/
 //let count=db.run(SELECT count(*) FROM 
 const app=express();
 const port = process.env.PORT || 8000;
@@ -459,3 +466,9 @@ app.post('/admin.html', function(req,res){
 app.listen(port, function() {
     console.log(`Listening on port ${port}!`);
 });
+
+setTimeout(()=>{
+	fill_Food(foods, dbf)
+	fill_Clothing(clothes, dbc)
+	fill_Electronics(electronics, dbe)
+}, 3000)
