@@ -5,6 +5,39 @@ const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const format = require('string-format');
 const cookieSession = require('cookie-session');
+
+function fill_Food(){
+	for(let row of foods){
+		dbf.run(`INSERT INTO food(id, name, description, type) 
+			VALUES(?,?,?,?)`, row, (err) => {
+	  	if(err){
+			console.log(err);
+		}
+	});
+	}
+}
+
+function fill_Clothing(){
+	for(let row of clothes){
+		dbf.run(`INSERT INTO clothing(id, name, description, material, style, size) 
+			VALUES(?,?,?,?,?,?)`, row, (err) => {
+	  	if(err){
+			console.log(err);
+		}
+	});
+	}
+}
+
+function fill_Electronics(){
+	for(let row of electronics){
+		dbf.run(`INSERT INTO electronic(id, name, price, description, brand, type) 
+			VALUES(?,?,?,?,?,?)`, row, (err) => {
+	  	if(err){
+			console.log(err);
+		}
+	});
+	}
+}
 //----Create user database----//
 const db = new sqlite3.Database( __dirname + '/userbase.db',
 	function(err){
