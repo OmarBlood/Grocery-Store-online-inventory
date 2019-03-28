@@ -26,19 +26,18 @@
     </style>
 </head>
 <body>
-    
     <h1>Login into your Account</h1>
     <div id="login">
-        <label for="username">Username: </label>
-        <input type="text" name="username" id="login">
-        <br>
-        <label for="password">Password: </label>
-        <input type="text" name="password" id="login">
+      <form method=post>
+        Username: <input type="text" name="username" id="login">
 
-        <br><br>
+        Password: <input type="text" name="password" id="login">
 
-        <p>Not registered? Sign up </p>
-        <a href="signup"> here </a>
+        <input type="submit" value="Submit">
+
+        <p>Not registered? Sign up here.</p>
+        <input type="submit" value="Register">
+      </form>
     </div>
 </body>
 </html>
