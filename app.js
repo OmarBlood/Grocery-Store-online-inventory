@@ -6,6 +6,25 @@ const sqlite3 = require('sqlite3').verbose();
 const format = require('string-format');
 const cookieSession = require('cookie-session');
 
+function fill_Admin(admin, db){
+	let query = `SELECT count(id) FROM users`;
+	db.all(query, [], (err, results) => {
+		if(err){
+			console.log(err);
+		}
+		else if(results == null){
+			for(let row of admin){
+				db.run(`INSERT INTO users(id, firstName, lastName, username, password, email, dob, administration)
+					VALUES(?,?,?,?,?,?,?)`, row, (err) => {
+				if(err){
+					console.log(err);
+				}
+				});
+			}
+		}
+	});
+}
+
 function fill_Food(foods, dbf){
 	let query = `SELECT count(id) FROM food`
 	dbf.all(query, [], (err, results) => {
