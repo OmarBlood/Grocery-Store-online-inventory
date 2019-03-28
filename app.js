@@ -5,77 +5,8 @@ const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const format = require('string-format');
 const cookieSession = require('cookie-session');
+const dbFill = require('./dbFill')
 
-function fill_Food(foods, dbf){
-	let query = `SELECT count(id) FROM food`
-	dbf.all(query, [], (err, results) => {
-		if(err){
-			console.log(err)
-		}
-		else if(results == null){
-			for(let row of foods){
-				dbf.run(`INSERT INTO food(id, name, description, type) 
-					VALUES(?,?,?,?)`, row, (err) => {
-				  if(err){
-					console.log(err);
-				}
-			});
-			}
-		}
-	})
-
-	// ************* DO NOT DELETE THIS ****************
-	/*dbf.all(query, [], (err, rows) => {
-		if (err){
-			console.log(err)
-		}
-		rows.forEach((row) =>{
-			console.log(row.id)
-			count = count + 1
-		})
-		console.log("count is", count)
-	}) */
-	// if count == 0{}
-
-}
-
-function fill_Clothing(clothes, dbc){
-	let query = `SELECT count(id) FROM clothing`
-	dbc.all(query, [], (err, results) => {
-		if(err){
-			console.log(err)
-		}
-		else if(results == null){
-			for(let row of clothes){
-				dbc.run(`INSERT INTO clothing(id, name, description, material, style, size) 
-					VALUES(?,?,?,?,?,?)`, row, (err) => {
-				  	if(err){
-					console.log(err);
-					}
-				});
-			}
-		}
-	})
-}
-
-function fill_Electronics(electronics, dbe){
-	let query = `SELECT count(id) FROM electronic`
-	dbe.all(query, [], (err, results) => {
-		if(err){
-			console.log(err)
-		}
-		else if(results == null){
-			for(let row of electronics){
-				dbe.run(`INSERT INTO electronic(id, name, price, description, brand, type) 
-					VALUES(?,?,?,?,?,?)`, row, (err) => {
-				  	if(err){
-					console.log(err);
-					}
-				});
-			}
-		}
-	})
-}
 
 //----Create user database----//
 const db = new sqlite3.Database( __dirname + '/userbase.db',
@@ -472,7 +403,7 @@ app.listen(port, function() {
 });
 
 setTimeout(()=>{
-	fill_Food(foods, dbf)
-	fill_Clothing(clothes, dbc)
-	fill_Electronics(electronics, dbe)
+	dbFill.fill_Food(foods, dbf)
+	dbFill.fill_Clothing(clothes, dbc)
+	dbFill.fill_Electronics(electronics, dbe)
 }, 3000)
