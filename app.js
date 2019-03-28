@@ -8,18 +8,6 @@ const cookieSession = require('cookie-session');
 
 function fill_Food(foods, dbf){
 	let query = `SELECT count(id) FROM food`
-
-	// ************* DO NOT DELETE THIS ****************
-	/*dbf.all(query, [], (err, rows) => {
-		if (err){
-			console.log(err)
-		}
-		rows.forEach((row) =>{
-			console.log(row.id)
-			count = count + 1
-		})
-		console.log("count is", count)
-	}) */
 	dbf.all(query, [], (err, results) => {
 		if(err){
 			console.log(err)
@@ -35,9 +23,19 @@ function fill_Food(foods, dbf){
 			}
 		}
 	})
-	// if count == 0{
 
-	//}
+	// ************* DO NOT DELETE THIS ****************
+	/*dbf.all(query, [], (err, rows) => {
+		if (err){
+			console.log(err)
+		}
+		rows.forEach((row) =>{
+			console.log(row.id)
+			count = count + 1
+		})
+		console.log("count is", count)
+	}) */
+	// if count == 0{}
 
 }
 
@@ -78,6 +76,7 @@ function fill_Electronics(electronics, dbe){
 		}
 	})
 }
+
 //----Create user database----//
 const db = new sqlite3.Database( __dirname + '/userbase.db',
 	function(err){
@@ -252,6 +251,7 @@ function reg_check(req,res){
 		res.redirect('/signup');
 		console.log('Cannot have a blank date of birth!');
 	}
+
 //Check for unique username and password
 	if(req.body.username && req.body.password){
 		console.log('Checking database for entries');
