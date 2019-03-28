@@ -7,25 +7,6 @@ const format = require('string-format');
 const cookieSession = require('cookie-session');
 const dbFill = require('./dbFill')
 
-function fill_Admin(admin, db){
-	let query = `SELECT count(id) FROM users`;
-	db.all(query, [], (err, results) => {
-		if(err){
-			console.log(err);
-		}
-		else if(results == null){
-			for(let row of admin){
-				db.run(`INSERT INTO users(id, firstName, lastName, username, password, email, dob, administration)
-					VALUES(?,?,?,?,?,?,?)`, row, (err) => {
-				if(err){
-					console.log(err);
-				}
-				});
-			}
-		}
-	});
-}
-
 //----Create user database----//
 const db = new sqlite3.Database( __dirname + '/userbase.db',
 	function(err){
@@ -46,8 +27,6 @@ const db = new sqlite3.Database( __dirname + '/userbase.db',
 			console.log('opened userbase.db');
 		}
 	});
-
-//admin = [['admin', '1', 'admin1', 'admin1', 'admin@mun', 2019-01-01, true]];
 
 //----Create food database----//
 const dbf = new sqlite3.Database( __dirname + '/food_dpt.db',
@@ -106,6 +85,10 @@ const dbe = new sqlite3.Database( __dirname + '/electronics_dpt.db', function(er
 	}
 });
 
+//----Pushing admin data into user database----//
+
+admin = [['admin', '1', 'admin1', 'admin1', 'admin@mun', 2019-01-01, true]];
+
 //----Pushing data into food database----//
 foods = [
 	[0, 'lamb', 'Frenched Australian fresh rack of lamb', 'fresh'],
@@ -122,7 +105,6 @@ foods = [
 	[11 , 'granola' , 'Nature valley oats and honey granola ; 253 g' , 'packaged'],
 	[12 , 'lasagna' , ' Chef boyardi beef lasagna with tomato sauce  ; 425 g' , 'canned']	
 ];
-
 
 //----Pushing data into clothing database----//
 clothes = [
@@ -421,6 +403,7 @@ app.listen(port, function() {
 });
 
 setTimeout(()=>{
+	dbFill.fill_Admin(admin, db)
 	dbFill.fill_Food(foods, dbf)
 	dbFill.fill_Clothing(clothes, dbc)
 	dbFill.fill_Electronics(electronics, dbe)
