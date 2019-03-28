@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const format = require('string-format');
 const cookieSession = require('cookie-session');
-const dbFill = require('./dbFill')
+const dbFill = require('./backend/dbFill')
 
 //----Create user database----//
 const db = new sqlite3.Database( __dirname + '/userbase.db',
