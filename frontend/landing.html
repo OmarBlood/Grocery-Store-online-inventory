@@ -5,30 +5,126 @@
 	<link rel="stylesheet" type="text/css" href="landing.css">
 </head>
 <body>
-	<ul>
-		<li class="ex1"> 
-			<a> one </a> 
+	
+	<!-- ************************************ Logo Section ************************************** -->
+
+	<div id="logo">
+		<p>
+			<img src="Pictures/logo.png" alt="LOGO Goes Here">
+		</p>
+	</div>
+	
+	<!-- ************************************ Search Section ************************************** -->
+
+	<div id="Search_Bar">
+		<label for="search" style="color: black"> Search: </label>
+		<input type="text" name="Search" id="search">
+
+		<a style="float: right;" href="login"> Login / Sign-Up</a>
+
+	</div>
+
+	<!-- ************************************ Navigations Section ************************************** -->
+
+	<div id="Navigation_Bar">
+		<ul>
+			<li class="ex1"> 
+				<a> one </a> 
+				<ul class="ex2">
+					<li> <a href="holder"> Holder </a> </li>
+					<li> <a href="holder"> Holder </a> </li>
+					<li> <a href="holder"> Holder </a> </li>
+				</ul>
+			</li>
+
+			<li class="ex1">
+				<a> two </a>
+				<ul class="ex2">
+					<li> <a href="holder"> Holder </a> </li>
+					<li> <a href="holder"> Holder </a> </li>
+					<li> <a href="holder"> Holder </a> </li>
+				</ul>
+			</li>
+			
+			<li class="ex1"><a href="holder"> three </a></li>
+			<li class="ex1"><a href="holder"> four </a></li>
+		</ul>
+	</div>
+
+	<!-- ************************************ Slideshow Sections ************************************** -->
+
+	<div id="Slideshow">
+
+		<div class="slideshow-container">
+		
+		<div class="mySlides fade">
+			<div class="numbertext">1 / 3</div>
+			<img src="Pictures/1.jpg" style="width:100%">
+			<div class="text">Caption Text</div>
+	  	</div>
+	  
+	  	<div class="mySlides fade">
+			<div class="numbertext">2 / 3</div>
+			<img src="Pictures/2.jpg" style="width:100%">
+			<div class="text">Caption Two</div>
+	  	</div>
+	  
+	  	<div class="mySlides fade">
+			<div class="numbertext">3 / 3</div>
+			<img src="Pictures/3.jpg" style="width:100%">
+			<div class="text">Caption Three</div>
+	  	</div>
+	  
+		<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+		<a class="next" onclick="plusSlides(1)">&#10095;</a>
+	  
+	  	</div>
+	  	<br>
+	  
+		<div style="text-align:center">
+			<span class="dot" onclick="currentSlide(1)"></span> 
+			<span class="dot" onclick="currentSlide(2)"></span> 
+			<span class="dot" onclick="currentSlide(3)"></span> 
+		</div>
+	  
+		<script>
+		let slideIndex = 0;
+		showSlides();
+		function showSlides() {
+			let i;
+			let slides = document.getElementsByClassName("mySlides");
+			for (i = 0; i < slides.length; i++) {
+				slides[i].style.display = "none";
+			}
+			slideIndex++;
+			if (slideIndex > slides.length) {
+				slideIndex = 1
+			}
+			slides[slideIndex-1].style.display = "block";
+			setTimeout(showSlides, 2000); // Change image every 2 seconds
+		} 
+		</script>
+	</div>
+	<!-- ************************************ Last Viewed Item section ************************************** -->
+	<div id="last_viewed_item">
+		<h4>Last time you were here, you were looking at this: </h4>
+		<!-- Put an empty box here that will contain a script the queries the DB for the item-->
+
+	</div>
+
+	<!-- ************************************ Contact Us section ************************************** -->
+	<div id="contact_us">
+		<h2>Contact Us</h2>
+		<p>For more information about our services, or if you have any questinos,
+			please contact us at:
 			<ul>
-				<li class="ex1"> <a href="holder"> Holder </a> </li>
-				<li class="ex1"><a href="holder"> Holder </a></li>
-				<li class="ex1"><a href="holder"> Holder </a></li>
+				<li>Phone: 1 (709) 863-8358</li>
+				<li>E-mail: shewal.barmeel@gmail.com</li>
+				<li>Address: 60 Elizabeth Ave, St. John's, NL, Canada.</li>
 			</ul>
-		</li>
-		<li class="ex1">
-			<a> two </a>
-			<ul>
-				<li class="ex1"> <a href="holder"> Holder </a> </li>
-				<li class="ex1"><a href="holder"> Holder </a></li>
-				<li class="ex1"><a href="holder"> Holder </a></li>
-			</ul>
-		</li>
-		<li class="ex1"><a href="holder"> three </a></li>
-		<li class="ex1"><a href="holder"> four </a></li>
-	</ul>
-	<slider>
-		<slide> <p>Slide 1</p> </slide>
-		<slide> <p>Slide 2</p> </slide>
-		<slide> <p>Slide 3</p> </slide>
-	</slider>
+		</p>
+	</div>
+
+	
 </body>
 </html>
