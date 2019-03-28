@@ -7,41 +7,76 @@ const format = require('string-format');
 const cookieSession = require('cookie-session');
 
 function fill_Food(foods, dbf){
-	//let count = dbf.run(`SELECT COUNT (*) FROM food`)
-	//console.log(count)
-	// if count == 0{
-		for(let row of foods){
-			dbf.run(`INSERT INTO food(id, name, description, type) 
-				VALUES(?,?,?,?)`, row, (err) => {
-			  if(err){
-				console.log(err);
-			}
-		});
+	let query = `SELECT count(id) FROM food`
+
+	// ************* DO NOT DELETE THIS ****************
+	/*dbf.all(query, [], (err, rows) => {
+		if (err){
+			console.log(err)
 		}
+		rows.forEach((row) =>{
+			console.log(row.id)
+			count = count + 1
+		})
+		console.log("count is", count)
+	}) */
+	dbf.all(query, [], (err, results) => {
+		if(err){
+			console.log(err)
+		}
+		else if(results == null){
+			for(let row of foods){
+				dbf.run(`INSERT INTO food(id, name, description, type) 
+					VALUES(?,?,?,?)`, row, (err) => {
+				  if(err){
+					console.log(err);
+				}
+			});
+			}
+		}
+	})
+	// if count == 0{
+
 	//}
 
 }
 
 function fill_Clothing(clothes, dbc){
-	for(let row of clothes){
-		dbc.run(`INSERT INTO clothing(id, name, description, material, style, size) 
-			VALUES(?,?,?,?,?,?)`, row, (err) => {
-	  	if(err){
-			console.log(err);
+	let query = `SELECT count(id) FROM clothing`
+	dbc.all(query, [], (err, results) => {
+		if(err){
+			console.log(err)
 		}
-	});
-	}
+		else if(results == null){
+			for(let row of clothes){
+				dbc.run(`INSERT INTO clothing(id, name, description, material, style, size) 
+					VALUES(?,?,?,?,?,?)`, row, (err) => {
+				  	if(err){
+					console.log(err);
+					}
+				});
+			}
+		}
+	})
 }
 
 function fill_Electronics(electronics, dbe){
-	for(let row of electronics){
-		dbe.run(`INSERT INTO electronic(id, name, price, description, brand, type) 
-			VALUES(?,?,?,?,?,?)`, row, (err) => {
-	  	if(err){
-			console.log(err);
+	let query = `SELECT count(id) FROM electronic`
+	dbe.all(query, [], (err, results) => {
+		if(err){
+			console.log(err)
 		}
-	});
-	}
+		else if(results == null){
+			for(let row of electronics){
+				dbe.run(`INSERT INTO electronic(id, name, price, description, brand, type) 
+					VALUES(?,?,?,?,?,?)`, row, (err) => {
+				  	if(err){
+					console.log(err);
+					}
+				});
+			}
+		}
+	})
 }
 //----Create user database----//
 const db = new sqlite3.Database( __dirname + '/userbase.db',
@@ -140,16 +175,7 @@ foods = [
 	[12 , 'lasagna' , ' Chef boyardi beef lasagna with tomato sauce  ; 425 g' , 'canned']	
 ];
 
-/*
-for(let row of foods){
-	dbf.run(`INSERT INTO food(id, name, description, type) 
-		VALUES(?,?,?,?)`, row, (err) => {
-	  	if(err){
-			console.log(err);
-		}
-	});
-}
-*/
+
 //----Pushing data into clothing database----//
 clothes = [
 	[13, 'black', 'Massimo Dutti, made in Pakistan', 'Cotton', 'Casual', 'Large'],
@@ -163,16 +189,6 @@ clothes = [
 	[21, 'shoe', 'Tahari, made in China', 'Leather and Felt', 'Size 9']
 ];
 
-/*
-for(let row of clothes){
-	dbc.run(`INSERT INTO clothing(id, name, description, material, style, size) 
-		VALUES(?,?,?,?,?,?)`, row, (err) => {
-	  	if(err){
-			console.log(err);
-		}
-	});
-}
-*/
 
 //----Pushing data into electronics database----//
 electronics = [
@@ -186,20 +202,8 @@ electronics = [
 	[29, 'Microwave', '60', '700 Watts, 10 power levels, child safety lock, weight and time defrost.', 'Danby', 'appliances'],
 	[30, 'Coffee Machine', '138', '14 oz water reservoir, single capacity, packages and ground coffee compatible.', 'Nespresso', '']
 ];
-/*
-for(let row of electronics){
-	dbe.run(`INSERT INTO electronics(id, name, price, description, brand, type) 
-		VALUES(?,?,?,?,?,?)`, row, (err) => {
-	  	if(err){
-			console.log(err);
-		}
-		else{
-			console.log('Success');
-		}
-	});
-}
-*/
-//let count=db.run(SELECT count(*) FROM 
+
+
 const app=express();
 const port = process.env.PORT || 8000;
 
