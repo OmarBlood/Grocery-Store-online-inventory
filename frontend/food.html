@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cs 3100 Project</title>
+	<link rel="stylesheet" type="text/css" href="landing.css">
+</head>
+<body>
+	
+	<!-- ************************************ Logo Section ************************************** -->
+
+	<div id="logo">
+		<p>
+			<img src="Pictures/logo.png" alt="LOGO Goes Here">
+		</p>
+	</div>
+	
+	<!-- ************************************ Search Section ************************************** -->
+
+	<div id="Search_Bar">
+		<label for="search" style="color: black"> Search: </label>
+		<input type="text" name="Search" id="search">
+
+		<a style="float: right;" href="login"> Welcome, </a>
+		<script type="text/javascript">
+			let name = req.session.username;
+		</script>
+
+	</div>
+
+	<!-- ************************************ Navigations Section ************************************** -->
+
+	<div id="Navigation_Bar">
+		<ul>
+			<li class="ex1"> 
+				<a> Departments </a> 
+				<ul class="ex2">
+					<li> <a href="holder"> Food </a> </li>
+					<li> <a href="holder"> Clothes </a> </li>
+					<li> <a href="holder"> Electronics </a> </li>
+				</ul>
+			</li>
+			<li class="ex1"><a href="holder"> Flyers </a></li>
+			<li class="ex1"><a href="holder"> Recepies </a></li>
+			<li class="ex1"><a href="holder"> Catering </a></li>
+		</ul>
+	</div>
+
+	<!-- ************************************ Sort by ************************************** -->
+	<div id="box">
+		
+	</div>
+	<div>
+		<a>Sort by</a>
+		<form action="">
+  			<input type="radio" name="sort" value="Price"> Price<br>
+  			<input type="radio" name="sort" value="Alphabetical"> Alphabetical<br>
+		</form>
+	</div>
+	<!-- ************************************ Department Items ************************************** -->
+	<div>
+	</div>
+
+	<!-- ************************************ Contact Us section ************************************** -->
+	<div id="contact_us">
+		<h2>Contact Us</h2>
+		<p>For more information about our services, or if you have any questions,
+			please contact us at:
+			<ul>
+				<li>Phone: 1 (709) 863-8358</li>
+				<li>E-mail: shewal.barmeel@gmail.com</li>
+				<li>Address: 60 Elizabeth Ave, St. John's, NL, Canada.</li>
+			</ul>
+		</p>
+	</div>
+</body>
+</html>
