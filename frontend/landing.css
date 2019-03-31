@@ -45,6 +45,10 @@ div#Navigation_Bar{
 	line-height: 40px;
 	text-align: center;
 }
+#Navigation_Bar li.ex1 a{
+  text-decoration: none;
+  color: white;
+}
 #Navigation_Bar ul li:hover{
   background-color: rgb(122, 128, 126);
 }
@@ -67,11 +71,11 @@ div#Navigation_Bar{
 }
 /* Slideshow container */
 #Slideshow .slideshow-container {
-  max-width: 65%;
+  max-width: 30%;
   position: relative;
   margin-top: 5%;
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-left: auto;
+  margin-right: auto;
   background-color: lightgrey;
   z-index: -2;
 }
