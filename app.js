@@ -2,10 +2,12 @@
 const express = require('express');
 const hbs = require('express-hbs');
 const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 const sqlite3 = require('sqlite3').verbose();
 const format = require('string-format');
 const cookieSession = require('cookie-session');
-const dbFill = require('./backend/dbFill')
+const dbFill = require('./backend/dbFill');
+
 
 //----Create user database----//
 const db = new sqlite3.Database( __dirname + '/userbase.db',
@@ -87,7 +89,7 @@ const dbe = new sqlite3.Database( __dirname + '/electronics_dpt.db', function(er
 
 //----Pushing admin data into user database----//
 
-admin = [['admin', '1', 'admin1', 'admin1', 'admin@mun', 2019-01-01, true]];
+admins = [[1, 'admin', '1', 'admin1', 'admin1', 'admin@mun', 2019-01-01, true]];
 
 //----Pushing data into food database----//
 foods = [
@@ -139,7 +141,24 @@ const port = process.env.PORT || 8000;
 
 app.use(express.static( __dirname + '/frontend'));
 app.use(bodyParser.urlencoded({extended:true}));
-
+function fill_Admin(admin, db){
+	let query = `SELECT count(id) FROM users`;
+	db.all(query, [], (err, results) => {
+		if(err){
+			console.log(err);
+		}
+		else if(results == null){
+			for(let row of admin){
+				db.run(`INSERT INTO users(id, firstName, lastName, username, password, email, dob, administration)
+					VALUES(?,?,?,?,?,?,?)`, row, (err) => {
+				if(err){
+					console.log(err);
+				}
+				});
+			}
+		}
+	});
+}
 app.set('views', __dirname);
 app.engine('hbs', hbs.express4({
 	partialsDir: __dirname,
@@ -234,8 +253,7 @@ function reg_check(req,res){
 
 app.get('/', function(req,res) {
 	res.redirect('/landing.html');
-	
-	dbf.all(`SELECT * FROM food`, [], function(err, rows) {
+	db.all(`SELECT * FROM users`, [], function(err, rows) {
 		if(err){
 			console.log(err);
 		}
@@ -281,7 +299,7 @@ app.post('/login.html', function(req,res) {
 		console.log('Please enter a username.');
 		res.redirect('/login');
 	}
-	if(!req.body.password){
+	else if(!req.body.password){
 		console.log('Please enter a password.');
 		res.redirect('/login');
 	}
@@ -414,7 +432,7 @@ app.listen(port, function() {
 });
 
 setTimeout(()=>{
-	dbFill.fill_Admin(admin, db)
+	dbFill.fill_Admin(admins, db)
 	dbFill.fill_Food(foods, dbf)
 	dbFill.fill_Clothing(clothes, dbc)
 	dbFill.fill_Electronics(electronics, dbe)
