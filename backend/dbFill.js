@@ -17,7 +17,7 @@ function fill_Admin(admin, db){
         if(err){
             console.log(err);
         }
-        else if(results == null){
+        else if(results == ''){
             for(let row of admin){
                 db.run(`INSERT INTO users(id, firstName, lastName, username, password, email, dob, administration)
                     VALUES(?,?,?,?,?,?,?)`, row, (err) => {
