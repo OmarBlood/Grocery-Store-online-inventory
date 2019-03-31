@@ -234,6 +234,17 @@ function reg_check(req,res){
 
 app.get('/', function(req,res) {
 	res.redirect('/landing.html');
+	
+	dbf.all(`SELECT * FROM food`, [], function(err, rows) {
+		if(err){
+			console.log(err);
+		}
+		else if(!err){
+			for(row of rows){
+				console.log(row);
+			}
+		}
+	});
 });
 
 app.get('/signup', function(req,res) {
