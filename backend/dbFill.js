@@ -11,14 +11,14 @@
 		console.log("count is", count)
 	}) */
 	// if count == 0{}
-function fill_Admin(admin, db){
+function fill_Admin(admins, db){
     let query = `SELECT count(id) FROM users`;
     db.all(query, [], (err, results) => {
         if(err){
             console.log(err);
         }
         else if(results == ''){
-            for(let row of admin){
+            for(let row of admins){
                 db.run(`INSERT INTO users(id, firstName, lastName, username, password, email, dob, administration)
                     VALUES(?,?,?,?,?,?,?)`, row, (err) => {
                 if(err){
