@@ -2,9 +2,13 @@
 const express = require('express');
 const hbs = require('express-hbs');
 const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 const sqlite3 = require('sqlite3').verbose();
 const format = require('string-format');
 const cookieSession = require('cookie-session');
+const dbFill = require('./backend/dbFill');
+
+
 //----Create user database----//
 const db = new sqlite3.Database( __dirname + '/userbase.db',
 	function(err){
@@ -25,8 +29,6 @@ const db = new sqlite3.Database( __dirname + '/userbase.db',
 			console.log('opened userbase.db');
 		}
 	});
-
-//admin = [['admin', '1', 'admin1', 'admin1', 'admin@mun', 2019-01-01, true]];
 
 //----Create food database----//
 const dbf = new sqlite3.Database( __dirname + '/food_dpt.db',
@@ -73,7 +75,7 @@ const dbe = new sqlite3.Database( __dirname + '/electronics_dpt.db', function(er
 	}
 	else if(!err){
 		dbe.run(`
-			CREATE TABLE IF NOT EXISTS electronics(
+			CREATE TABLE IF NOT EXISTS electronic(
 			id INTEGER PRIMARY KEY,
 			name TEXT,
 			price TEXT,
@@ -84,6 +86,10 @@ const dbe = new sqlite3.Database( __dirname + '/electronics_dpt.db', function(er
 		console.log('opened the electronics department database.');
 	}
 });
+
+//----Pushing admin data into user database----//
+
+admins = [[1, 'admin', '1', 'admin1', 'admin1', 'admin@mun', 2019-01-01, true]];
 
 //----Pushing data into food database----//
 foods = [
@@ -102,16 +108,6 @@ foods = [
 	[12 , 'lasagna' , ' Chef boyardi beef lasagna with tomato sauce  ; 425 g' , 'canned']	
 ];
 
-
-for(let row of foods){
-	dbf.run(`INSERT INTO food(id, name, description, type) 
-		VALUES(?,?,?,?)`, row, (err) => {
-	  	if(err){
-			console.log(err);
-		}
-	});
-}
-
 //----Pushing data into clothing database----//
 clothes = [
 	[13, 'black', 'Massimo Dutti, made in Pakistan', 'Cotton', 'Casual', 'Large'],
@@ -125,14 +121,6 @@ clothes = [
 	[21, 'shoe', 'Tahari, made in China', 'Leather and Felt', 'Size 9']
 ];
 
-for(let row of clothes){
-	dbc.run(`INSERT INTO clothing(id, name, description, material, style, size) 
-		VALUES(?,?,?,?,?,?)`, row, (err) => {
-	  	if(err){
-			console.log(err);
-		}
-	});
-}
 
 //----Pushing data into electronics database----//
 electronics = [
@@ -147,25 +135,30 @@ electronics = [
 	[30, 'Coffee Machine', '138', '14 oz water reservoir, single capacity, packages and ground coffee compatible.', 'Nespresso', '']
 ];
 
-for(let row of electronics){
-	dbe.run(`INSERT INTO electronics(id, name, price, description, brand, type) 
-		VALUES(?,?,?,?,?,?)`, row, (err) => {
-	  	if(err){
-			console.log(err);
-		}
-		else{
-			console.log('Success');
-		}
-	});
-}
 
-//let count=db.run(SELECT count(*) FROM 
 const app=express();
 const port = process.env.PORT || 8000;
 
 app.use(express.static( __dirname + '/frontend'));
 app.use(bodyParser.urlencoded({extended:true}));
-
+function fill_Admin(admin, db){
+	let query = `SELECT count(id) FROM users`;
+	db.all(query, [], (err, results) => {
+		if(err){
+			console.log(err);
+		}
+		else if(results == null){
+			for(let row of admin){
+				db.run(`INSERT INTO users(id, firstName, lastName, username, password, email, dob, administration)
+					VALUES(?,?,?,?,?,?,?)`, row, (err) => {
+				if(err){
+					console.log(err);
+				}
+				});
+			}
+		}
+	});
+}
 app.set('views', __dirname);
 app.engine('hbs', hbs.express4({
 	partialsDir: __dirname,
@@ -208,6 +201,7 @@ function reg_check(req,res){
 		res.redirect('/signup');
 		console.log('Cannot have a blank date of birth!');
 	}
+
 //Check for unique username and password
 	if(req.body.username && req.body.password){
 		console.log('Checking database for entries');
@@ -258,8 +252,25 @@ function reg_check(req,res){
 }
 
 app.get('/', function(req,res) {
+	res.redirect('/landing');
+});
+
+app.get('/landing', function(req,res) {
+	console.log('Reached the landing page.');
+		db.all(`SELECT * FROM users`, [], function(err, rows) {
+	if(err){
+		console.log(err);
+	}
+	else if(!err){
+		for(row of rows){
+			r = JSON.stringify(row);
+			console.log(r);
+		}
+	}
+	});
 	res.redirect('/landing.html');
 });
+
 
 app.get('/signup', function(req,res) {
 
@@ -295,7 +306,7 @@ app.post('/login.html', function(req,res) {
 		console.log('Please enter a username.');
 		res.redirect('/login');
 	}
-	if(!req.body.password){
+	else if(!req.body.password){
 		console.log('Please enter a password.');
 		res.redirect('/login');
 	}
@@ -337,11 +348,6 @@ app.post('/login.html', function(req,res) {
 			}
 		});
 	}
-});
-
-app.get('/landing', function(req,res) {
-	console.log('Reached the landing page.');
-	res.redirect('/landing.html');
 });
 
 app.get('/page', function(req,res) {
@@ -426,3 +432,10 @@ app.post('/admin.html', function(req,res){
 app.listen(port, function() {
     console.log(`Listening on port ${port}!`);
 });
+
+setTimeout(()=>{
+	dbFill.fill_Admin(admins, db)
+	dbFill.fill_Food(foods, dbf)
+	dbFill.fill_Clothing(clothes, dbc)
+	dbFill.fill_Electronics(electronics, dbe)
+}, 3000)
